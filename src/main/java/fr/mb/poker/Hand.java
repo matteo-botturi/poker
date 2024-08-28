@@ -1,20 +1,18 @@
 package fr.mb.poker;
 
+import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class Hand {
-    private List<Card> cards;
+    private final List<Card> CARDS;
 
     public Hand() {
-        cards = new ArrayList<>(5);
-    }
-
-    public List<Card> getCards() {
-        return cards;
+        CARDS = new ArrayList<>(5);
     }
 
     public void addCardToHand(Card card) {
-        cards.add(card);
+        CARDS.add(card);
     }
 }

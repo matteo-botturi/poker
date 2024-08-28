@@ -1,22 +1,22 @@
 package fr.mb.poker;
 
 public class CalculateScore {
-    private int[] totalMethods = new int[10];
+    private final int[] TOTAL_METHODS = new int[10];
 
     public CalculateScore(Hand hand) {
-        totalMethods[0] = HandEvaluator.highCard(hand);
-        totalMethods[1] = HandEvaluator.onePair(hand);
-        totalMethods[2] = HandEvaluator.twoPair(hand);
-        totalMethods[3] = HandEvaluator.threeOfAKind(hand);
-        totalMethods[4] = HandEvaluator.straight(hand);
-        totalMethods[5] = HandEvaluator.flush(hand);
-        totalMethods[6] = HandEvaluator.fullHouse(hand);
-        totalMethods[7] = HandEvaluator.fourOfAKind(hand);
-        totalMethods[8] = HandEvaluator.straightFlush(hand);
-        totalMethods[9] = HandEvaluator.royalFlush(hand);
+        TOTAL_METHODS[0] = HandEvaluator.highCard(hand);
+        TOTAL_METHODS[1] = HandEvaluator.onePair(hand);
+        TOTAL_METHODS[2] = HandEvaluator.twoPair(hand);
+        TOTAL_METHODS[3] = HandEvaluator.threeOfAKind(hand);
+        TOTAL_METHODS[4] = HandEvaluator.straight(hand);
+        TOTAL_METHODS[5] = HandEvaluator.flush(hand);
+        TOTAL_METHODS[6] = HandEvaluator.fullHouse(hand);
+        TOTAL_METHODS[7] = HandEvaluator.fourOfAKind(hand);
+        TOTAL_METHODS[8] = HandEvaluator.straightFlush(hand);
+        TOTAL_METHODS[9] = HandEvaluator.royalFlush(hand);
     }
 
     public int getTotalMethods(int i) {
-        return totalMethods[i];
+        return TOTAL_METHODS[i];
     }
 }

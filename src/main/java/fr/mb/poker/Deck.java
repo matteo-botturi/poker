@@ -5,22 +5,21 @@ import java.util.Collections;
 import java.util.List;
 
 public class Deck extends Rules{
-    private List<Card> deckCards;
+    private final List<Card> DECK_CARDS;
 
     public Deck(int numberOfPlayers) {
-        deckCards = new ArrayList<>();
+        DECK_CARDS = new ArrayList<>();
         initializeDeck(numberOfPlayers);
         shuffle();
     }
 
     public void initializeDeck(int numberOfPlayers) {
-
         int numberOfStart = 11 - numberOfPlayers;
         int indexOfStart = indexOf(values, numberOfStart);
 
         for (String suit : suits) {
             for (int i = indexOfStart; i < ranks.length; i++)
-                deckCards.add(new Card(suit, ranks[i]));
+                DECK_CARDS.add(new Card(suit, ranks[i]));
         }
     }
 
@@ -33,12 +32,12 @@ public class Deck extends Rules{
     }
 
     public void shuffle() {
-        Collections.shuffle(deckCards);
+        Collections.shuffle(DECK_CARDS);
     }
 
     public Card dealCard() {
-        if (deckCards.isEmpty())
+        if (DECK_CARDS.isEmpty())
             throw new DeckEmptyException();
-        return deckCards.remove(0);
+        return DECK_CARDS.removeFirst();
     }
 }

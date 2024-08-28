@@ -7,14 +7,13 @@ import java.util.Map;
 
 public class HandEvaluator {
 
-
     public static int flush(Hand hand) {
-        List<Card> cards = hand.getCards();
+        List<Card> cards = hand.getCARDS();
         int score = 0;
         for (int i = 0; i < cards.size(); i++) {
-            if (i > 0 && !cards.get(i).getSuit().equals(cards.get(i - 1).getSuit()))
+            if (i > 0 && !cards.get(i).getSUIT().equals(cards.get(i - 1).getSUIT()))
                 return 0;
-            score += cards.get(i).getValue();
+            score += cards.get(i).getVALUE();
         }
         return score;
     }
@@ -28,34 +27,34 @@ public class HandEvaluator {
 
     public static int aceOut(Hand hand) {
         int score = 0;
-        for(int i = 0; i < hand.getCards().size() - 2; i++) {
-            Card courrentCard = hand.getCards().get(i);
-            Card nextCard = hand.getCards().get(i + 1);
+        for(int i = 0; i < hand.getCARDS().size() - 2; i++) {
+            Card courrentCard = hand.getCARDS().get(i);
+            Card nextCard = hand.getCARDS().get(i + 1);
             if(isConsecutive(courrentCard, nextCard))
-                score += courrentCard.getValue();
+                score += courrentCard.getVALUE();
             else
                 return 0;
         }
-        score += hand.getCards().get(hand.getCards().size() - 2).getValue();
+        score += hand.getCARDS().get(hand.getCARDS().size() - 2).getVALUE();
         return score;
     }
 
     public static int straightResearch(Hand hand) {
-        List<Card> cards = hand.getCards();
+        List<Card> cards = hand.getCARDS();
         int score = 0;
         for (int i = 0; i < cards.size() - 1; i++) {
             Card currentCard = cards.get(i);
             Card nextCard = cards.get(i + 1);
             if (!isConsecutive(currentCard, nextCard))
                 return 0;
-            score += currentCard.getValue();
+            score += currentCard.getVALUE();
         }
-        return score + cards.get(cards.size() - 1).getValue();
+        return score + cards.get(cards.size() - 1).getVALUE();
     }
 
     private static boolean hasAce(Hand hand) {
-        for(int i = 0; i < hand.getCards().size(); i++) {
-            if(hand.getCards().get(i).getRank().equals("A"))
+        for(int i = 0; i < hand.getCARDS().size(); i++) {
+            if(hand.getCARDS().get(i).getRANK().equals("A"))
                 return true;
         }
         return false;
@@ -79,14 +78,14 @@ public class HandEvaluator {
             return 0;
         else {
             Map<String, Integer> cardFrequencies = new HashMap<>();
-            for (Card card : hand.getCards()) {
-                String rank = card.getRank();
+            for (Card card : hand.getCARDS()) {
+                String rank = card.getRANK();
                 cardFrequencies.put(rank, cardFrequencies.getOrDefault(rank, 0) + 1);
             }
-            for (Card card : hand.getCards()) {
-                String rank = card.getRank();
+            for (Card card : hand.getCARDS()) {
+                String rank = card.getRANK();
                 if (cardFrequencies.get(rank) == 4)
-                    return card.getValue() * 4;
+                    return card.getVALUE() * 4;
             }
             return 0;
         }
@@ -97,8 +96,8 @@ public class HandEvaluator {
             return 0;
         else {
             int score = 0;
-            for(Card card : hand.getCards()) {
-                score += card.getValue();
+            for(Card card : hand.getCARDS()) {
+                score += card.getVALUE();
             }
             return score;
         }
@@ -109,14 +108,14 @@ public class HandEvaluator {
             return 0;
         else {
             Map<String, Integer> cardFrequencies = new HashMap<>();
-            for (Card card : hand.getCards()) {
-                String rank = card.getRank();
+            for (Card card : hand.getCARDS()) {
+                String rank = card.getRANK();
                 cardFrequencies.put(rank, cardFrequencies.getOrDefault(rank, 0) + 1);
             }
-            for (Card card : hand.getCards()) {
-                String rank = card.getRank();
+            for (Card card : hand.getCARDS()) {
+                String rank = card.getRANK();
                 if (cardFrequencies.get(rank) == 3)
-                    return card.getValue() * 3;
+                    return card.getVALUE() * 3;
             }
             return 0;
         }
@@ -127,8 +126,8 @@ public class HandEvaluator {
             return 0;
         else {
             Map<String, List<Card>> cardGroups = new HashMap<>();
-            for (Card card : hand.getCards()) {
-                String rank = card.getRank();
+            for (Card card : hand.getCARDS()) {
+                String rank = card.getRANK();
                 cardGroups.computeIfAbsent(rank, k -> new ArrayList<>()).add(card);
             }
             int pairCount = 0;
@@ -136,7 +135,7 @@ public class HandEvaluator {
             for (List<Card> group : cardGroups.values()) {
                 if (group.size() == 2) {
                     pairCount++;
-                    score += group.get(0).getValue() * 2;
+                    score += group.getFirst().getVALUE() * 2;
                 }
             }
             if (pairCount == 2)
@@ -151,14 +150,14 @@ public class HandEvaluator {
             return 0;
         else {
             Map<String, List<Card>> cardGroups = new HashMap<>();
-            for (Card card : hand.getCards()) {
-                String rank = card.getRank();
+            for (Card card : hand.getCARDS()) {
+                String rank = card.getRANK();
                 cardGroups.computeIfAbsent(rank, k -> new ArrayList<>()).add(card);
             }
             int maxPairValue = 0;
             for (List<Card> group : cardGroups.values()) {
                 if (group.size() == 2) {
-                    int pairValue = group.get(0).getValue() * 2;
+                    int pairValue = group.getFirst().getVALUE() * 2;
                     if (pairValue > maxPairValue) {
                         maxPairValue = pairValue;
                     }
@@ -173,9 +172,9 @@ public class HandEvaluator {
             return 0;
         }else {
             int max = 0;
-            for(Card card : hand.getCards()) {
-                if(card.getValue() > max)
-                    max = card.getValue();
+            for(Card card : hand.getCARDS()) {
+                if(card.getVALUE() > max)
+                    max = card.getVALUE();
             }
             return max;
         }
@@ -183,8 +182,8 @@ public class HandEvaluator {
 
     public static int findVariations(Hand hand) {
         int variations = 0;
-        for(int i = 0; i < hand.getCards().size() - 1; i++) {
-            boolean condition = hand.getCards().get(i).getValue() == hand.getCards().get(i+1).getValue();
+        for(int i = 0; i < hand.getCARDS().size() - 1; i++) {
+            boolean condition = hand.getCARDS().get(i).getVALUE() == hand.getCARDS().get(i+1).getVALUE();
             if(!condition)
                 variations++;
         }
@@ -192,6 +191,6 @@ public class HandEvaluator {
     }
 
     public static boolean isConsecutive(Card courrentCard, Card nextCard) {
-        return courrentCard.getValue() == nextCard.getValue() - 1;
+        return courrentCard.getVALUE() == nextCard.getVALUE() - 1;
     }
 }
