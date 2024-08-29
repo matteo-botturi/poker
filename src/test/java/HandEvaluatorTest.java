@@ -36,7 +36,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "7"));
         hand.addCardToHand(new Card(H, "J"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(37, HandEvaluator.flush(hand));
 
         //Not Flush
@@ -46,7 +46,7 @@ class HandEvaluatorTest {
         hand2.addCardToHand(new Card(H, "7"));
         hand2.addCardToHand(new Card(H, "J"));
 
-        Collections.sort(hand2.getCARDS(), new CardValueComparator());
+        hand2.getCARDS().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.flush(hand2));
     }
 
@@ -60,7 +60,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(D, "4"));
         hand.addCardToHand(new Card(D, "6"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(20, HandEvaluator.straightFlush(hand));
 
         //Not Straight
@@ -70,7 +70,7 @@ class HandEvaluatorTest {
         hand2.addCardToHand(new Card(D, "4"));
         hand2.addCardToHand(new Card(D, "7"));
 
-        Collections.sort(hand2.getCARDS(), new CardValueComparator());
+        hand2.getCARDS().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.straightFlush(hand2));
 
         //NotFlush
@@ -80,7 +80,7 @@ class HandEvaluatorTest {
         hand3.addCardToHand(new Card(D, "4"));
         hand3.addCardToHand(new Card(D, "6"));
 
-        Collections.sort(hand3.getCARDS(), new CardValueComparator());
+        hand3.getCARDS().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.straightFlush(hand3));
 
         //Straight with A = 1
@@ -90,7 +90,7 @@ class HandEvaluatorTest {
         hand4.addCardToHand(new Card(D, "4"));
         hand4.addCardToHand(new Card(D, "A"));
 
-        Collections.sort(hand4.getCARDS(), new CardValueComparator());
+        hand4.getCARDS().sort(new CardValueComparator());
         assertEquals(15, HandEvaluator.straightFlush(hand4));
     }
 
@@ -103,7 +103,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "K"));
         hand.addCardToHand(new Card(H, "A"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(60, HandEvaluator.royalFlush(hand));
 
         //Not Royal
@@ -113,7 +113,7 @@ class HandEvaluatorTest {
         hand2.addCardToHand(new Card(H, "K"));
         hand2.addCardToHand(new Card(H, "9"));
 
-        Collections.sort(hand2.getCARDS(), new CardValueComparator());
+        hand2.getCARDS().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.royalFlush(hand2));
 
         //Royal Not Flush
@@ -123,7 +123,7 @@ class HandEvaluatorTest {
         hand3.addCardToHand(new Card(H, "K"));
         hand3.addCardToHand(new Card(H, "A"));
 
-        Collections.sort(hand3.getCARDS(), new CardValueComparator());
+        hand3.getCARDS().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.royalFlush(hand3));
     }
 
@@ -135,7 +135,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "J"));
         hand.addCardToHand(new Card(S, "2"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(8, HandEvaluator.fourOfAKind(hand));
     }
 
@@ -147,7 +147,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "J"));
         hand.addCardToHand(new Card(S, "J"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(43, HandEvaluator.fullHouse(hand));
     }
 
@@ -160,7 +160,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "10"));
         hand.addCardToHand(new Card(S, "J"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(45, HandEvaluator.straight(hand));
 
         //Straight A = 1
@@ -170,7 +170,7 @@ class HandEvaluatorTest {
         hand2.addCardToHand(new Card(H, "5"));
         hand2.addCardToHand(new Card(S, "4"));
 
-        Collections.sort(hand2.getCARDS(), new CardValueComparator());
+        hand2.getCARDS().sort(new CardValueComparator());
         assertEquals(15, HandEvaluator.straight(hand2));
     }
 
@@ -183,7 +183,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "7"));
         hand.addCardToHand(new Card(S, "4"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(12, HandEvaluator.threeOfAKind(hand));
 
         //FullHouse
@@ -193,7 +193,7 @@ class HandEvaluatorTest {
         hand2.addCardToHand(new Card(H, "J"));
         hand2.addCardToHand(new Card(S, "J"));
 
-        Collections.sort(hand2.getCARDS(), new CardValueComparator());
+        hand2.getCARDS().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.threeOfAKind(hand2));
     }
 
@@ -206,7 +206,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "Q"));
         hand.addCardToHand(new Card(S, "2"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(22, HandEvaluator.twoPair(hand));
 
         //4-in-a-Kind
@@ -216,7 +216,7 @@ class HandEvaluatorTest {
         hand2.addCardToHand(new Card(H, "J"));
         hand2.addCardToHand(new Card(S, "2"));
 
-        Collections.sort(hand2.getCARDS(), new CardValueComparator());
+        hand2.getCARDS().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.twoPair(hand2));
     }
 
@@ -229,7 +229,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "9"));
         hand.addCardToHand(new Card(S, "4"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(HandEvaluator.onePair(hand), 6);
 
         //0 Pair
@@ -239,7 +239,7 @@ class HandEvaluatorTest {
         hand2.addCardToHand(new Card(H, "9"));
         hand2.addCardToHand(new Card(S, "4"));
 
-        Collections.sort(hand2.getCARDS(), new CardValueComparator());
+        hand2.getCARDS().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.onePair(hand2));
     }
 
@@ -251,7 +251,7 @@ class HandEvaluatorTest {
         hand.addCardToHand(new Card(H, "K"));
         hand.addCardToHand(new Card(S, "J"));
 
-        Collections.sort(hand.getCARDS(), new CardValueComparator());
+        hand.getCARDS().sort(new CardValueComparator());
         assertEquals(13, HandEvaluator.highCard(hand));
     }
 }

@@ -24,13 +24,13 @@ public class Main {
 
     private static void seeStats() {
         for(int i = 0; i < 10; i++) {
-            System.out.println(Rules.stringCombinations(i) + ": " + percentage(i) + " %");
+            System.out.println(Rules.stringCombo(i) + ": " + percentage(i) + " %");
         }
     }
 
     private static double percentage(int i) {
-        double resultat = Statistics.getCombo(i)*100.0/Statistics.getNumberOfGames();
-        return Math.round(resultat*100.0)/100.0;
+        double result = Statistics.getCombo(i)*100.0/Statistics.getNumberOfGames();
+        return Math.round(result*100.0)/100.0;
     }
 
     private static int getNumberOfPlayers(Scanner scanner) {

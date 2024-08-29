@@ -45,7 +45,7 @@ public class Game{
                 }
             }
             player.setPoints(maxScore);
-            player.setWinnerCombo(Rules.stringCombinations(winningCombo));
+            player.setWinnerCombo(Rules.stringCombo(winningCombo));
             Statistics.updateCombo(winningCombo);
         }
     }
@@ -54,13 +54,13 @@ public class Game{
         for (Player player : PLAYERS) {
             for (int i = 0; i < 5; i++)
                 player.getHAND().addCardToHand(DECK.dealCard());
-            Collections.sort(player.getHAND().getCARDS(), new CardValueComparator());
+            player.getHAND().getCARDS().sort(new CardValueComparator());
         }
     }
 
     public void printOverview() {
-        for (Player giocatore : PLAYERS) {
-            System.out.println(giocatore);
+        for (Player player : PLAYERS) {
+            System.out.println(player);
         }
     }
 }
