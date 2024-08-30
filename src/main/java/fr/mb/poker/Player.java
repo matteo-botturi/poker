@@ -3,27 +3,28 @@ package fr.mb.poker;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.stream.Collectors;
+
 @Getter
-@Setter
 public class Player {
-    private final String NAME;
-    private final Hand HAND;
+    private final String name;
+    private final Hand hand;
+    @Setter
     private int points = 0;
+    @Setter
     private String winnerCombo = "";
 
     public Player(String name) {
-        this.NAME = name;
-        this.HAND = new Hand();
+        this.name = name;
+        this.hand = new Hand();
     }
 
     @Override
     public String toString() {
-        StringBuilder playerInfo = new StringBuilder();
-        playerInfo.append("Player: ").append(NAME).append("\n");
-        playerInfo.append("Hand: ");
-        for (Card card : HAND.getCARDS())
-            playerInfo.append(card.toString()).append(" , ");
-        playerInfo.setLength(playerInfo.length() - 3);
-        return playerInfo.toString();
+        String handCards = hand.getCards().stream()
+                .map(Card::toString)
+                .collect(Collectors.joining(" , "));
+        return "Player: " + name + "\n" +
+                "Hand: " + handCards;
     }
 }

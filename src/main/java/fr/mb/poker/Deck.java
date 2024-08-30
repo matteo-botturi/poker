@@ -3,41 +3,37 @@ package fr.mb.poker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Deck extends Rules{
-    private final List<Card> DECK_CARDS;
+    private final List<Card> deckCards;
 
     public Deck(int numberOfPlayers) {
-        DECK_CARDS = new ArrayList<>();
+        deckCards = new ArrayList<>();
         initializeDeck(numberOfPlayers);
-        shuffle();
+        Collections.shuffle(deckCards);
     }
 
-    public void initializeDeck(int numberOfPlayers) {
+    private void initializeDeck(int numberOfPlayers) {
         int numberOfStart = 11 - numberOfPlayers;
         int indexOfStart = indexOf(values, numberOfStart);
 
         for (String suit : suits) {
             for (int i = indexOfStart; i < ranks.length; i++)
-                DECK_CARDS.add(new Card(suit, ranks[i]));
+                deckCards.add(new Card(suit, ranks[i]));
         }
     }
 
     private int indexOf(int[] values, int numberOfStart) {
-        for(int i = 0; i < values.length; i++) {
-            if(values[i] == numberOfStart)
-                return i;
-        }
-        return 0;
-    }
-
-    public void shuffle() {
-        Collections.shuffle(DECK_CARDS);
+        return IntStream.range(0, values.length)
+                .filter(i -> values[i] == numberOfStart)
+                .findFirst()
+                .orElse(0);
     }
 
     public Card dealCard() {
-        if (DECK_CARDS.isEmpty())
+        if (deckCards.isEmpty())
             throw new DeckEmptyException();
-        return DECK_CARDS.removeFirst();
+        return deckCards.remove(0);
     }
 }

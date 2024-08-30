@@ -6,6 +6,6 @@ public class CardValueComparator implements Comparator<Card> {
 
     @Override
     public int compare(Card card1, Card card2) {
-        return Integer.compare(card1.getVALUE(), card2.getVALUE());
+        return Comparator.comparingInt(Card::getValue).compare(card1, card2);
     }
 }

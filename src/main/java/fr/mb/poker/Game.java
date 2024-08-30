@@ -1,16 +1,19 @@
 package fr.mb.poker;
 
+import fr.mb.poker.enumeration.ScoreType;
+
 import java.util.*;
 
 public class Game{
-    private final List<Player> PLAYERS;
-    private final Deck DECK;
+    private static final int NUMBER_OF_CARDS = 5;
+    private final List<Player> players;
+    private final Deck deck;
 
     public Game(int numberOfPlayers) {
-        PLAYERS = new ArrayList<>(numberOfPlayers);
-        DECK = new Deck(numberOfPlayers);
+        players = new ArrayList<>(numberOfPlayers);
+        deck = new Deck(numberOfPlayers);
         for (int i = 1; i <= numberOfPlayers; i++)
-            PLAYERS.add(new Player("Player " + i));
+            players.add(new Player("Player " + i));
         Statistics.updateNumberOfGames(numberOfPlayers);
     }
 
@@ -22,44 +25,43 @@ public class Game{
     }
 
     private void andTheWinnerIs() {
-        Optional<Player> winner = PLAYERS.stream().max(Comparator.comparingInt(Player::getPoints));
-        if(winner.isPresent()) {
-            Player winningPlayer = winner.get();
+        Optional<Player> winner = players.stream().max(Comparator.comparingInt(Player::getPoints));
+        winner.ifPresent(player -> {
             System.out.println("\nAND THE WINNER IS...\n");
-            System.out.println(winningPlayer);
-            System.out.printf("%nthat wins with a %s combo!!!", winningPlayer.getWinnerCombo());
-        }
+            System.out.println(player);
+            System.out.printf("%nthat wins with a %s combo!!!%n", player.getWinnerCombo());
+        });
     }
 
     private void determineScore() {
-        int maxScore = 0;
-        int winningCombo = -1;
+        for (Player player : players) {
+            CalculateScore score = new CalculateScore(player.getHand());
+            int maxScore = 0;
+            ScoreType winningCombo = ScoreType.HIGH_CARD;
 
-        for (Player player : PLAYERS) {
-            CalculateScore score = new CalculateScore(player.getHAND());
-            for (int i = 0; i < 10; i++) {
-                int comboScore = score.getTotalMethods(i);
+            for (ScoreType combo : ScoreType.values()) {
+                int comboScore = score.getScore(combo);
                 if (comboScore > maxScore) {
                     maxScore = comboScore;
-                    winningCombo = i;
+                    winningCombo = combo;
                 }
             }
             player.setPoints(maxScore);
-            player.setWinnerCombo(Rules.stringCombo(winningCombo));
-            Statistics.updateCombo(winningCombo);
+            player.setWinnerCombo(Rules.stringCombo(winningCombo.ordinal()));
+            Statistics.updateCombo(winningCombo.ordinal());
         }
     }
 
     private void dealerCards() {
-        for (Player player : PLAYERS) {
-            for (int i = 0; i < 5; i++)
-                player.getHAND().addCardToHand(DECK.dealCard());
-            player.getHAND().getCARDS().sort(new CardValueComparator());
+        for (Player player : players) {
+            for (int i = 0; i < NUMBER_OF_CARDS; i++)
+                player.getHand().addCardToHand(deck.dealCard());
+            player.getHand().getCards().sort(new CardValueComparator());
         }
     }
 
     public void printOverview() {
-        for (Player player : PLAYERS) {
+        for (Player player : players) {
             System.out.println(player);
         }
     }

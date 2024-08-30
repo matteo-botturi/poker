@@ -6,13 +6,13 @@ import java.util.List;
 
 @Getter
 public class Hand {
-    private final List<Card> CARDS;
+    private final List<Card> cards;
 
     public Hand() {
-        CARDS = new ArrayList<>(5);
+        cards = new ArrayList<>(5);
     }
 
     public void addCardToHand(Card card) {
-        CARDS.add(card);
+        cards.add(card);
     }
 }
