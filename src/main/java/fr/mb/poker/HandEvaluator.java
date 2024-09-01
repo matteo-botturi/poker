@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class HandEvaluator {
@@ -24,7 +25,7 @@ public class HandEvaluator {
     public static int aceOut(Hand hand) {
         List<Card> cards = hand.getCards();
         int score = 0;
-        for (int i = 0; i < cards.size() - 1; i++) {
+        for (int i = 0; i < cards.size() - 2; i++) {
             Card currentCard = cards.get(i);
             Card nextCard = cards.get(i + 1);
             if (isConsecutive(currentCard, nextCard))
@@ -32,7 +33,7 @@ public class HandEvaluator {
             else
                 return 0;
         }
-        return score + cards.get(cards.size() - 1).getValue();
+        return score += hand.getCards().get(hand.getCards().size() - 2).getValue();
     }
 
     public static int straightResearch(Hand hand) {
@@ -54,7 +55,7 @@ public class HandEvaluator {
 
     public static int straightFlush(Hand hand) {
         int straightScore = straight(hand);
-        if (flush(hand) > 0 && straight(hand) > 0)
+        if (flush(hand) > 0 && straightScore > 0)
             return straightScore;
         return 0;
     }
@@ -63,20 +64,26 @@ public class HandEvaluator {
         return flush(hand) > 0 && straightResearch(hand) == 60 ? flush(hand) : 0;
     }
 
-    public static int fourOfAKind(Hand hand) {
-        if (findVariations(hand) != 1)
-            return 0;
-        Map<String, Integer> cardFrequencies = new HashMap<>();
-        for (Card card : hand.getCards()) {
-            String rank = card.getRank();
-            cardFrequencies.put(rank, cardFrequencies.getOrDefault(rank, 0) + 1);
-        }
-        for (Card card : hand.getCards()) {
-            String rank = card.getRank();
-            if (cardFrequencies.get(rank) == 4)
-                return card.getValue() * 4;
+    private static int calculateOfAKind(Hand hand, int count) {
+        if (findVariations(hand) != (5 - count)) return 0;
+
+        Map<String, Long> cardFrequencies = hand.getCards().stream()
+                .collect(Collectors.groupingBy(Card::getRank, Collectors.counting()));
+
+        for (Map.Entry<String, Long> entry : cardFrequencies.entrySet()) {
+            if (entry.getValue() == (long) count) {
+                return hand.getCards().stream()
+                        .filter(card -> card.getRank().equals(entry.getKey()))
+                        .findFirst()
+                        .get()
+                        .getValue() * count;
+            }
         }
         return 0;
+    }
+
+    public static int fourOfAKind(Hand hand) {
+        return calculateOfAKind(hand, 4);
     }
 
     public static int fullHouse(Hand hand) {
@@ -86,64 +93,29 @@ public class HandEvaluator {
     }
 
     public static int threeOfAKind(Hand hand) {
-        if (findVariations(hand) != 2)
-            return 0;
-        else {
-            Map<String, Integer> cardFrequencies = new HashMap<>();
-            for (Card card : hand.getCards()) {
-                String rank = card.getRank();
-                cardFrequencies.put(rank, cardFrequencies.getOrDefault(rank, 0) + 1);
-            }
-            for (Card card : hand.getCards()) {
-                String rank = card.getRank();
-                if (cardFrequencies.get(rank) == 3)
-                    return card.getValue() * 3;
-            }
-            return 0;
-        }
+        return calculateOfAKind(hand, 3);
+    }
+
+    public static int calculatePairScore(Hand hand, int expectedVariations, int pairCountRequired) {
+        if (findVariations(hand) != expectedVariations || (pairCountRequired == 2 && threeOfAKind(hand) > 0)) return 0;
+
+        return hand.getCards().stream()
+                .collect(Collectors.groupingBy(Card::getRank, Collectors.counting()))
+                .entrySet().stream()
+                .filter(entry -> entry.getValue() == 2L)
+                .mapToInt(entry -> hand.getCards().stream()
+                        .filter(card -> card.getRank().equals(entry.getKey()))
+                        .mapToInt(Card::getValue)
+                        .sum())
+                .sum();
     }
 
     public static int twoPair(Hand hand) {
-        if (findVariations(hand) != 2 || threeOfAKind(hand) > 0)
-            return 0;
-        else {
-            Map<String, List<Card>> cardGroups = groupValues(hand);
-            int pairCount = 0;
-            int score = 0;
-            for (List<Card> group : cardGroups.values()) {
-                if (group.size() == 2) {
-                    pairCount++;
-                    score += group.getFirst().getValue() * 2;
-                }
-            }
-            if (pairCount == 2)
-                return score;
-            else
-                return 0;
-        }
+        return calculatePairScore(hand, 2, 2);
     }
 
     public static int onePair(Hand hand) {
-        if (findVariations(hand) != 3) return 0;
-
-        Map<String, List<Card>> cardGroups = groupValues(hand);
-        int maxPairValue = 0;
-        for (List<Card> group : cardGroups.values()) {
-            if (group.size() == 2) {
-                int pairValue = group.getFirst().getValue() * 2;
-                if (pairValue > maxPairValue) maxPairValue = pairValue;
-            }
-        }
-        return maxPairValue;
-    }
-
-    private static Map<String, List<Card>> groupValues(Hand hand) {
-        Map<String, List<Card>> cardGroups = new HashMap<>();
-        for (Card card : hand.getCards()) {
-            String rank = card.getRank();
-            cardGroups.computeIfAbsent(rank, k -> new ArrayList<>()).add(card);
-        }
-        return cardGroups;
+        return calculatePairScore(hand, 3, 1);
     }
 
     public static int highCard(Hand hand) {

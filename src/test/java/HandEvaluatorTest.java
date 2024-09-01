@@ -127,14 +127,14 @@ class HandEvaluatorTest {
 
     @Test
     void testFourOfAKind() {
-        hand.addCardToHand(new Card(H, "2"));
-        hand.addCardToHand(new Card(D, "2"));
-        hand.addCardToHand(new Card(C, "2"));
+        hand.addCardToHand(new Card(H, "A"));
+        hand.addCardToHand(new Card(D, "A"));
+        hand.addCardToHand(new Card(C, "A"));
         hand.addCardToHand(new Card(H, "J"));
-        hand.addCardToHand(new Card(S, "2"));
+        hand.addCardToHand(new Card(S, "A"));
 
         hand.getCards().sort(new CardValueComparator());
-        assertEquals(8, HandEvaluator.fourOfAKind(hand));
+        assertEquals(56, HandEvaluator.fourOfAKind(hand));
     }
 
     @Test
@@ -198,21 +198,21 @@ class HandEvaluatorTest {
     @Test
     void testTwoPair() {
         //Two Pair
-        hand.addCardToHand(new Card(H, "9"));
+        hand.addCardToHand(new Card(H, "Q"));
         hand.addCardToHand(new Card(D, "2"));
         hand.addCardToHand(new Card(C, "9"));
         hand.addCardToHand(new Card(H, "Q"));
         hand.addCardToHand(new Card(S, "2"));
 
         hand.getCards().sort(new CardValueComparator());
-        assertEquals(22, HandEvaluator.twoPair(hand));
+        assertEquals(28, HandEvaluator.twoPair(hand));
 
         //4-in-a-Kind
-        hand2.addCardToHand(new Card(H, "2"));
-        hand2.addCardToHand(new Card(D, "2"));
-        hand2.addCardToHand(new Card(C, "2"));
+        hand2.addCardToHand(new Card(H, "A"));
+        hand2.addCardToHand(new Card(D, "A"));
+        hand2.addCardToHand(new Card(C, "A"));
         hand2.addCardToHand(new Card(H, "J"));
-        hand2.addCardToHand(new Card(S, "2"));
+        hand2.addCardToHand(new Card(S, "A"));
 
         hand2.getCards().sort(new CardValueComparator());
         assertEquals(0, HandEvaluator.twoPair(hand2));
