@@ -1,255 +1,289 @@
-import fr.mb.poker.Card;
-import fr.mb.poker.CardValueComparator;
-import fr.mb.poker.Hand;
-import fr.mb.poker.HandEvaluator;
+import fr.mb.poker.model.Card;
+import fr.mb.poker.model.Hand;
+import fr.mb.poker.outils.HandEvaluator;
+import fr.mb.poker.enumeration.Rank;
+import fr.mb.poker.enumeration.Suit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class HandEvaluatorTest {
+public class HandEvaluatorTest {
+
     private Hand hand;
-    private Hand hand2;
-    private Hand hand3;
-    private Hand hand4;
-    private static final String H = "Hearts";
-    private static final String C = "Clubs";
-    private static final String D = "Diamonds";
-    private static final String S = "Spades";
 
     @BeforeEach
     void setUp() {
         hand = new Hand();
-        hand2 = new Hand();
-        hand3 = new Hand();
-        hand4 = new Hand();
+    }
+
+    private void addCardsToHand(Hand hand, Card... cards) {
+        for (Card card : cards) {
+            hand.addCardToHand(card);
+        }
     }
 
     @Test
     void testFlush() {
-        //Flush
-        hand.addCardToHand(new Card(H, "2"));
-        hand.addCardToHand(new Card(H, "K"));
-        hand.addCardToHand(new Card(H, "4"));
-        hand.addCardToHand(new Card(H, "7"));
-        hand.addCardToHand(new Card(H, "J"));
-
-        hand.getCards().sort(new CardValueComparator());
+        // Flush
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.TWO),
+                new Card(Suit.HEARTS, Rank.KING),
+                new Card(Suit.HEARTS, Rank.FOUR),
+                new Card(Suit.HEARTS, Rank.SEVEN),
+                new Card(Suit.HEARTS, Rank.JACK)
+        );
         assertEquals(37, HandEvaluator.flush(hand));
 
-        //Not Flush
-        hand2.addCardToHand(new Card(H, "2"));
-        hand2.addCardToHand(new Card(H, "K"));
-        hand2.addCardToHand(new Card(S, "4"));
-        hand2.addCardToHand(new Card(H, "7"));
-        hand2.addCardToHand(new Card(H, "J"));
-
-        hand2.getCards().sort(new CardValueComparator());
-        assertEquals(0, HandEvaluator.flush(hand2));
+        // Not Flush
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.TWO),
+                new Card(Suit.HEARTS, Rank.KING),
+                new Card(Suit.SPADES, Rank.FOUR),
+                new Card(Suit.HEARTS, Rank.SEVEN),
+                new Card(Suit.HEARTS, Rank.JACK)
+        );
+        assertEquals(0, HandEvaluator.flush(hand));
     }
-
 
     @Test
     void testStraightFlush() {
-        //Straight Flush
-        hand.addCardToHand(new Card(D, "2"));
-        hand.addCardToHand(new Card(D, "5"));
-        hand.addCardToHand(new Card(D, "3"));
-        hand.addCardToHand(new Card(D, "4"));
-        hand.addCardToHand(new Card(D, "6"));
-
-        hand.getCards().sort(new CardValueComparator());
+        // Straight Flush
+        addCardsToHand(hand,
+                new Card(Suit.DIAMONDS, Rank.TWO),
+                new Card(Suit.DIAMONDS, Rank.THREE),
+                new Card(Suit.DIAMONDS, Rank.FOUR),
+                new Card(Suit.DIAMONDS, Rank.FIVE),
+                new Card(Suit.DIAMONDS, Rank.SIX)
+        );
         assertEquals(20, HandEvaluator.straightFlush(hand));
 
-        //Not Straight
-        hand2.addCardToHand(new Card(D, "2"));
-        hand2.addCardToHand(new Card(D, "5"));
-        hand2.addCardToHand(new Card(D, "3"));
-        hand2.addCardToHand(new Card(D, "4"));
-        hand2.addCardToHand(new Card(D, "7"));
+        // Not Straight
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.DIAMONDS, Rank.TWO),
+                new Card(Suit.DIAMONDS, Rank.THREE),
+                new Card(Suit.DIAMONDS, Rank.FOUR),
+                new Card(Suit.DIAMONDS, Rank.FIVE),
+                new Card(Suit.DIAMONDS, Rank.SEVEN)
+        );
+        assertEquals(0, HandEvaluator.straightFlush(hand));
 
-        hand2.getCards().sort(new CardValueComparator());
-        assertEquals(0, HandEvaluator.straightFlush(hand2));
+        // Not Flush
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.DIAMONDS, Rank.TWO),
+                new Card(Suit.CLUBS, Rank.FIVE),
+                new Card(Suit.DIAMONDS, Rank.THREE),
+                new Card(Suit.DIAMONDS, Rank.FOUR),
+                new Card(Suit.DIAMONDS, Rank.SIX)
+        );
+        assertEquals(0, HandEvaluator.straightFlush(hand));
 
-        //NotFlush
-        hand3.addCardToHand(new Card(D, "2"));
-        hand3.addCardToHand(new Card(C, "5"));
-        hand3.addCardToHand(new Card(D, "3"));
-        hand3.addCardToHand(new Card(D, "4"));
-        hand3.addCardToHand(new Card(D, "6"));
-
-        hand3.getCards().sort(new CardValueComparator());
-        assertEquals(0, HandEvaluator.straightFlush(hand3));
-
-        //Straight with A = 1
-        hand4.addCardToHand(new Card(D, "2"));
-        hand4.addCardToHand(new Card(D, "5"));
-        hand4.addCardToHand(new Card(D, "3"));
-        hand4.addCardToHand(new Card(D, "4"));
-        hand4.addCardToHand(new Card(D, "A"));
-
-        hand4.getCards().sort(new CardValueComparator());
-        assertEquals(15, HandEvaluator.straightFlush(hand4));
+        // Straight with A = 1
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.DIAMONDS, Rank.TWO),
+                new Card(Suit.DIAMONDS, Rank.THREE),
+                new Card(Suit.DIAMONDS, Rank.FOUR),
+                new Card(Suit.DIAMONDS, Rank.FIVE),
+                new Card(Suit.DIAMONDS, Rank.ACE)
+        );
+        assertEquals(15, HandEvaluator.straightFlush(hand));
     }
 
     @Test
     void testRoyalFlush() {
-        //Royal Flush
-        hand.addCardToHand(new Card(H, "10"));
-        hand.addCardToHand(new Card(H, "J"));
-        hand.addCardToHand(new Card(H, "Q"));
-        hand.addCardToHand(new Card(H, "K"));
-        hand.addCardToHand(new Card(H, "A"));
-
-        hand.getCards().sort(new CardValueComparator());
+        // Royal Flush
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.TEN),
+                new Card(Suit.HEARTS, Rank.JACK),
+                new Card(Suit.HEARTS, Rank.QUEEN),
+                new Card(Suit.HEARTS, Rank.KING),
+                new Card(Suit.HEARTS, Rank.ACE)
+        );
         assertEquals(60, HandEvaluator.royalFlush(hand));
 
-        //Not Royal
-        hand2.addCardToHand(new Card(H, "10"));
-        hand2.addCardToHand(new Card(H, "J"));
-        hand2.addCardToHand(new Card(H, "Q"));
-        hand2.addCardToHand(new Card(H, "K"));
-        hand2.addCardToHand(new Card(H, "9"));
+        // Not Royal Flush
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.TEN),
+                new Card(Suit.HEARTS, Rank.JACK),
+                new Card(Suit.HEARTS, Rank.QUEEN),
+                new Card(Suit.HEARTS, Rank.KING),
+                new Card(Suit.HEARTS, Rank.NINE)
+        );
+        assertEquals(0, HandEvaluator.royalFlush(hand));
 
-        hand2.getCards().sort(new CardValueComparator());
-        assertEquals(0, HandEvaluator.royalFlush(hand2));
-
-        //Royal Not Flush
-        hand3.addCardToHand(new Card(H, "10"));
-        hand3.addCardToHand(new Card(H, "J"));
-        hand3.addCardToHand(new Card(D, "Q"));
-        hand3.addCardToHand(new Card(H, "K"));
-        hand3.addCardToHand(new Card(H, "A"));
-
-        hand3.getCards().sort(new CardValueComparator());
-        assertEquals(0, HandEvaluator.royalFlush(hand3));
+        // Royal but Not Flush
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.TEN),
+                new Card(Suit.HEARTS, Rank.JACK),
+                new Card(Suit.DIAMONDS, Rank.QUEEN),
+                new Card(Suit.HEARTS, Rank.KING),
+                new Card(Suit.HEARTS, Rank.ACE)
+        );
+        assertEquals(0, HandEvaluator.royalFlush(hand));
     }
 
     @Test
     void testFourOfAKind() {
-        hand.addCardToHand(new Card(H, "A"));
-        hand.addCardToHand(new Card(D, "A"));
-        hand.addCardToHand(new Card(C, "A"));
-        hand.addCardToHand(new Card(H, "J"));
-        hand.addCardToHand(new Card(S, "A"));
-
-        hand.getCards().sort(new CardValueComparator());
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.ACE),
+                new Card(Suit.DIAMONDS, Rank.ACE),
+                new Card(Suit.CLUBS, Rank.ACE),
+                new Card(Suit.SPADES, Rank.ACE),
+                new Card(Suit.HEARTS, Rank.JACK)
+        );
         assertEquals(56, HandEvaluator.fourOfAKind(hand));
     }
 
     @Test
     void testFullHouse() {
-        hand.addCardToHand(new Card(H, "7"));
-        hand.addCardToHand(new Card(D, "7"));
-        hand.addCardToHand(new Card(C, "7"));
-        hand.addCardToHand(new Card(H, "J"));
-        hand.addCardToHand(new Card(S, "J"));
-
-        hand.getCards().sort(new CardValueComparator());
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.SEVEN),
+                new Card(Suit.DIAMONDS, Rank.SEVEN),
+                new Card(Suit.CLUBS, Rank.SEVEN),
+                new Card(Suit.HEARTS, Rank.JACK),
+                new Card(Suit.SPADES, Rank.JACK)
+        );
         assertEquals(43, HandEvaluator.fullHouse(hand));
     }
 
     @Test
     public void testStraight() {
-        //Straight "normal"
-        hand.addCardToHand(new Card(H, "7"));
-        hand.addCardToHand(new Card(D, "8"));
-        hand.addCardToHand(new Card(C, "9"));
-        hand.addCardToHand(new Card(H, "10"));
-        hand.addCardToHand(new Card(S, "J"));
-
-        hand.getCards().sort(new CardValueComparator());
+        // Straight "normal"
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.SEVEN),
+                new Card(Suit.DIAMONDS, Rank.EIGHT),
+                new Card(Suit.CLUBS, Rank.NINE),
+                new Card(Suit.HEARTS, Rank.TEN),
+                new Card(Suit.SPADES, Rank.JACK)
+        );
         assertEquals(45, HandEvaluator.straight(hand));
 
-        //Straight A = 1
-        hand2.addCardToHand(new Card(H, "A"));
-        hand2.addCardToHand(new Card(D, "3"));
-        hand2.addCardToHand(new Card(C, "2"));
-        hand2.addCardToHand(new Card(H, "5"));
-        hand2.addCardToHand(new Card(S, "4"));
-
-        hand2.getCards().sort(new CardValueComparator());
-        assertEquals(15, HandEvaluator.straight(hand2));
+        // Straight A = 1
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.DIAMONDS, Rank.TWO),
+                new Card(Suit.CLUBS, Rank.THREE),
+                new Card(Suit.HEARTS, Rank.FOUR),
+                new Card(Suit.SPADES, Rank.FIVE),
+                new Card(Suit.HEARTS, Rank.ACE)
+        );
+        assertEquals(15, HandEvaluator.straight(hand));
     }
 
     @Test
     void testThreeOfAKind() {
-        //Three-in-a-Kind
-        hand.addCardToHand(new Card(H, "4"));
-        hand.addCardToHand(new Card(D, "4"));
-        hand.addCardToHand(new Card(C, "8"));
-        hand.addCardToHand(new Card(H, "7"));
-        hand.addCardToHand(new Card(S, "4"));
-
-        hand.getCards().sort(new CardValueComparator());
+        // Three-of-a-Kind
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.FOUR),
+                new Card(Suit.DIAMONDS, Rank.FOUR),
+                new Card(Suit.CLUBS, Rank.FOUR),
+                new Card(Suit.HEARTS, Rank.SEVEN),
+                new Card(Suit.SPADES, Rank.EIGHT)
+        );
         assertEquals(12, HandEvaluator.threeOfAKind(hand));
 
-        //FullHouse
-        hand2.addCardToHand(new Card(H, "7"));
-        hand2.addCardToHand(new Card(D, "7"));
-        hand2.addCardToHand(new Card(C, "7"));
-        hand2.addCardToHand(new Card(H, "J"));
-        hand2.addCardToHand(new Card(S, "J"));
-
-        hand2.getCards().sort(new CardValueComparator());
-        assertEquals(0, HandEvaluator.threeOfAKind(hand2));
+        // Full House
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.SEVEN),
+                new Card(Suit.DIAMONDS, Rank.SEVEN),
+                new Card(Suit.CLUBS, Rank.SEVEN),
+                new Card(Suit.HEARTS, Rank.JACK),
+                new Card(Suit.SPADES, Rank.JACK)
+        );
+        assertEquals(0, HandEvaluator.threeOfAKind(hand));
     }
 
     @Test
     void testTwoPair() {
-        //Two Pair
-        hand.addCardToHand(new Card(H, "Q"));
-        hand.addCardToHand(new Card(D, "2"));
-        hand.addCardToHand(new Card(C, "9"));
-        hand.addCardToHand(new Card(H, "Q"));
-        hand.addCardToHand(new Card(S, "2"));
-
-        hand.getCards().sort(new CardValueComparator());
+        // Two Pair
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.QUEEN),
+                new Card(Suit.DIAMONDS, Rank.QUEEN),
+                new Card(Suit.CLUBS, Rank.TWO),
+                new Card(Suit.SPADES, Rank.TWO),
+                new Card(Suit.HEARTS, Rank.NINE)
+        );
         assertEquals(28, HandEvaluator.twoPair(hand));
 
-        //4-in-a-Kind
-        hand2.addCardToHand(new Card(H, "A"));
-        hand2.addCardToHand(new Card(D, "A"));
-        hand2.addCardToHand(new Card(C, "A"));
-        hand2.addCardToHand(new Card(H, "J"));
-        hand2.addCardToHand(new Card(S, "A"));
-
-        hand2.getCards().sort(new CardValueComparator());
-        assertEquals(0, HandEvaluator.twoPair(hand2));
+        // Four-of-a-Kind
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.ACE),
+                new Card(Suit.DIAMONDS, Rank.ACE),
+                new Card(Suit.CLUBS, Rank.ACE),
+                new Card(Suit.SPADES, Rank.ACE),
+                new Card(Suit.HEARTS, Rank.JACK)
+        );
+        assertEquals(0, HandEvaluator.twoPair(hand));
     }
 
     @Test
     void testOnePair() {
-        //One Pair
-        hand.addCardToHand(new Card(H, "3"));
-        hand.addCardToHand(new Card(D, "A"));
-        hand.addCardToHand(new Card(C, "3"));
-        hand.addCardToHand(new Card(H, "9"));
-        hand.addCardToHand(new Card(S, "4"));
+        // One Pair
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.THREE),
+                new Card(Suit.CLUBS, Rank.THREE),
+                new Card(Suit.DIAMONDS, Rank.ACE),
+                new Card(Suit.SPADES, Rank.FOUR),
+                new Card(Suit.HEARTS, Rank.NINE)
+        );
+        assertEquals(6, HandEvaluator.onePair(hand));
 
-        hand.getCards().sort(new CardValueComparator());
-        assertEquals(HandEvaluator.onePair(hand), 6);
-
-        //0 Pair
-        hand2.addCardToHand(new Card(H, "3"));
-        hand2.addCardToHand(new Card(D, "A"));
-        hand2.addCardToHand(new Card(C, "Q"));
-        hand2.addCardToHand(new Card(H, "9"));
-        hand2.addCardToHand(new Card(S, "4"));
-
-        hand2.getCards().sort(new CardValueComparator());
-        assertEquals(0, HandEvaluator.onePair(hand2));
+        // 0 Pair
+        hand = new Hand();
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.THREE),
+                new Card(Suit.DIAMONDS, Rank.ACE),
+                new Card(Suit.CLUBS, Rank.QUEEN),
+                new Card(Suit.HEARTS, Rank.NINE),
+                new Card(Suit.SPADES, Rank.FOUR)
+        );
+        assertEquals(0, HandEvaluator.onePair(hand));
     }
 
     @Test
     void testHighCard() {
-        hand.addCardToHand(new Card(H, "8"));
-        hand.addCardToHand(new Card(D, "7"));
-        hand.addCardToHand(new Card(C, "9"));
-        hand.addCardToHand(new Card(H, "K"));
-        hand.addCardToHand(new Card(S, "J"));
-
-        hand.getCards().sort(new CardValueComparator());
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.EIGHT),
+                new Card(Suit.DIAMONDS, Rank.SEVEN),
+                new Card(Suit.CLUBS, Rank.NINE),
+                new Card(Suit.SPADES, Rank.JACK),
+                new Card(Suit.HEARTS, Rank.KING)
+        );
         assertEquals(13, HandEvaluator.highCard(hand));
+    }
+
+    @Test
+    public void testAdjustAceForLowStraight() {
+        addCardsToHand(hand,
+                new Card(Suit.HEARTS, Rank.ACE),
+                new Card(Suit.DIAMONDS, Rank.TWO),
+                new Card(Suit.CLUBS, Rank.THREE),
+                new Card(Suit.SPADES, Rank.FOUR),
+                new Card(Suit.HEARTS, Rank.FIVE));
+
+        hand.sortHand();
+
+        assertEquals(14, hand.getCards().get(4).getValue());
+
+        HandEvaluator.straight(hand);
+
+        assertEquals(1, hand.getCards().get(0).getValue());
+        assertEquals(Rank.ACE, hand.getCards().get(0).getRank());
+        assertEquals(1, hand.getCards().get(0).getValue());
+        assertEquals(Rank.TWO, hand.getCards().get(1).getRank());
+        assertEquals(2, hand.getCards().get(1).getValue());
+        assertEquals(Rank.THREE, hand.getCards().get(2).getRank());
+        assertEquals(3, hand.getCards().get(2).getValue());
+        assertEquals(Rank.FOUR, hand.getCards().get(3).getRank());
+        assertEquals(4, hand.getCards().get(3).getValue());
+        assertEquals(Rank.FIVE, hand.getCards().get(4).getRank());
+        assertEquals(5, hand.getCards().get(4).getValue());
     }
 }
