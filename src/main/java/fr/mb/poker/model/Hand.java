@@ -14,7 +14,7 @@ public class Hand {
         cards = new ArrayList<>(MAX_CARDS);
     }
 
-    public void addCardToHand(Card card) {
+    public void addCard(Card card) {
         cards.add(card);
     }
 

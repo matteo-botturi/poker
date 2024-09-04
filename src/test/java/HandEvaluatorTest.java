@@ -18,7 +18,7 @@ public class HandEvaluatorTest {
 
     private void addCardsToHand(Hand hand, Card... cards) {
         for (Card card : cards) {
-            hand.addCardToHand(card);
+            hand.addCard(card);
         }
     }
 

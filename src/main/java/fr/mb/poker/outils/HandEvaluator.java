@@ -9,33 +9,72 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class HandEvaluator {
+    private static final int ROYAL_FLUSH_SCORE = 60;
+    private static final int LOW_STRAIGHT_SCORE = 15;
+
+    public static int royalFlush(Hand hand) {
+        return isFlush(hand) && calculateStraightScore(hand) == ROYAL_FLUSH_SCORE ? flushScore(hand) : 0;
+    }
+
+    public static int straightFlush(Hand hand) {
+        int straightScore = straight(hand);
+        return isFlush(hand) && straightScore > 0 ? straightScore : 0;
+    }
+
+    public static int fourOfAKind(Hand hand) {
+        return calculateOfAKind(hand, 4);
+    }
+
+    public static int fullHouse(Hand hand) {
+        if (findVariations(hand) != 1 || fourOfAKind(hand) > 0)
+            return 0;
+        return hand.getCards().stream().mapToInt(Card::getValue).sum();
+    }
 
     public static int flush(Hand hand) {
-        List<Card> cards = hand.getCards();
-        boolean isFlush = cards.stream().allMatch(card -> card.getSuit().equals(cards.get(0).getSuit()));
-        return isFlush ? cards.stream().mapToInt(Card::getValue).sum() : 0;
+        return isFlush(hand) ? flushScore(hand) : 0;
     }
 
     public static int straight(Hand hand) {
-        if (evaluateLowStraight(hand)){
+        if (isLowStraight(hand)) {
             adjustAceForLowStraight(hand);
-            return 15;
+            return LOW_STRAIGHT_SCORE;
         }
-        return evaluateStraight(hand);
+        return calculateStraightScore(hand);
     }
 
-    private static void adjustAceForLowStraight(Hand hand) {
-        hand.getCards().stream()
-                .filter(card -> card.getRank() == Rank.ACE)
-                .forEach(card -> card.setValue(1));
-        hand.sortHand();
+    public static int threeOfAKind(Hand hand) {
+        return calculateOfAKind(hand, 3);
     }
 
-    private static boolean isAcePresent(Hand hand) {
-        return hand.getCards().stream().anyMatch(card -> card.getRank() == Rank.ACE);
+    public static int twoPair(Hand hand) {
+        return calculatePairScore(hand, 2, 2);
     }
 
-    private static boolean evaluateLowStraight(Hand hand) {
+    public static int onePair(Hand hand) {
+        return calculatePairScore(hand, 3, 1);
+    }
+
+    public static int highCard(Hand hand) {
+        if (findVariations(hand) != 4)
+            return 0;
+        return hand.getCards().stream().mapToInt(Card::getValue).max().orElse(0);
+    }
+
+    public static int calculateStraightScore(Hand hand) {
+        List<Card> cards = hand.getCards();
+        int score = 0;
+        for (int i = 0; i < cards.size() - 1; i++) {
+            Card currentCard = cards.get(i);
+            Card nextCard = cards.get(i + 1);
+            if (!areConsecutives(currentCard, nextCard))
+                return 0;
+            score += currentCard.getValue();
+        }
+        return score + cards.get(cards.size() - 1).getValue();
+    }
+
+    private static boolean isLowStraight(Hand hand) {
         List<Card> cards = hand.getCards();
         return cards.stream()
                 .mapToInt(Card::getValue)
@@ -44,34 +83,11 @@ public class HandEvaluator {
                 .count() == 4 && isAcePresent(hand);
     }
 
-    public static boolean isConsecutive(Card courrentCard, Card nextCard) {
-        return courrentCard.getValue() == nextCard.getValue() - 1;
-    }
-
-    public static int evaluateStraight(Hand hand) {
-        List<Card> cards = hand.getCards();
-        int score = 0;
-        for (int i = 0; i < cards.size() - 1; i++) {
-            Card currentCard = cards.get(i);
-            Card nextCard = cards.get(i + 1);
-            if (!isConsecutive(currentCard, nextCard))
-                return 0;
-            score += currentCard.getValue();
-        }
-        return score + cards.get(cards.size() - 1).getValue();
-    }
-
-    public static int straightFlush(Hand hand) {
-        int straightScore = straight(hand);
-        return (flush(hand) > 0 && straightScore > 0) ? straightScore : 0;
-    }
-
-    public static int royalFlush(Hand hand) {
-        return flush(hand) > 0 && evaluateStraight(hand) == 60 ? flush(hand) : 0;
-    }
-
-    public static int fourOfAKind(Hand hand) {
-        return calculateOfAKind(hand, 4);
+    private static void adjustAceForLowStraight(Hand hand) {
+        hand.getCards().stream()
+                .filter(card -> card.getRank() == Rank.ACE)
+                .forEach(card -> card.setValue(1));
+        hand.sortHand();
     }
 
     private static int calculateOfAKind(Hand hand, int count) {
@@ -89,29 +105,13 @@ public class HandEvaluator {
                 .findFirst().orElse(0);
     }
 
-    public static int findVariations(Hand hand) {
+    private static boolean isFlush(Hand hand) {
         List<Card> cards = hand.getCards();
-        return (int) IntStream.range(0, cards.size() - 1)
-                .filter(i -> cards.get(i).getValue() != cards.get(i + 1).getValue())
-                .count();
+        return cards.stream().allMatch(card -> card.getSuit().equals(cards.get(0).getSuit()));
     }
 
-    public static int fullHouse(Hand hand) {
-        if (findVariations(hand) != 1 || fourOfAKind(hand) > 0)
-            return 0;
+    private static int flushScore(Hand hand) {
         return hand.getCards().stream().mapToInt(Card::getValue).sum();
-    }
-
-    public static int threeOfAKind(Hand hand) {
-        return calculateOfAKind(hand, 3);
-    }
-
-    public static int twoPair(Hand hand) {
-        return calculatePairScore(hand, 2, 2);
-    }
-
-    public static int onePair(Hand hand) {
-        return calculatePairScore(hand, 3, 1);
     }
 
     public static int calculatePairScore(Hand hand, int expectedVariations, int pairCountRequired) {
@@ -129,9 +129,18 @@ public class HandEvaluator {
                 .sum();
     }
 
-    public static int highCard(Hand hand) {
-        if (findVariations(hand) != 4)
-            return 0;
-        return hand.getCards().stream().mapToInt(Card::getValue).max().orElse(0);
+    public static int findVariations(Hand hand) {
+        List<Card> cards = hand.getCards();
+        return (int) IntStream.range(0, cards.size() - 1)
+                .filter(i -> cards.get(i).getValue() != cards.get(i + 1).getValue())
+                .count();
+    }
+
+    private static boolean isAcePresent(Hand hand) {
+        return hand.getCards().stream().anyMatch(card -> card.getRank() == Rank.ACE);
+    }
+
+    public static boolean areConsecutives(Card courrentCard, Card nextCard) {
+        return courrentCard.getValue() == nextCard.getValue() - 1;
     }
 }

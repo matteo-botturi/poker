@@ -1,5 +1,6 @@
 package fr.mb.poker.model;
 
+import fr.mb.poker.enumeration.Combo;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.stream.Collectors;
@@ -11,7 +12,7 @@ public class Player {
     @Setter
     private int points = 0;
     @Setter
-    private String winnerCombo = "";
+    private Combo winnerCombo;
 
     public Player(String name) {
         this.name = name;
@@ -23,6 +24,10 @@ public class Player {
         String handCards = hand.getCards().stream()
                 .map(Card::toString)
                 .collect(Collectors.joining(" , "));
-        return "Player: " + name + "\nHand: " + handCards + "\nPoints: " + points + "\nWinning Combination: " + winnerCombo;
+        return "Player: " + name +
+                "\nHand: " + handCards +
+                "\nPoints: " + points +
+                "\nWinning Combination: " +
+                (winnerCombo != null ? winnerCombo.getDescription() : "None");
     }
 }

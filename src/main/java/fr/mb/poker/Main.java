@@ -45,12 +45,11 @@ public class Main {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid number between 2 and 4.");
-                scanner.next(); // Consume the invalid input
+                scanner.next();
             }
         }
         return numPlayers;
     }
-
 
     private static boolean askPlayAgain(Scanner scanner) {
         String response = scanner.next().trim().toLowerCase();

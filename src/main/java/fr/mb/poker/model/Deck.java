@@ -6,12 +6,12 @@ import fr.mb.poker.exception.DeckEmptyException;
 import java.util.*;
 
 public class Deck{
-    private final List<Card> deckCards;
+    private final List<Card> deck;
 
     public Deck(int numberOfPlayers) {
-        deckCards = new ArrayList<>();
+        deck = new ArrayList<>();
         initializeDeck(numberOfPlayers);
-        Collections.shuffle(deckCards);
+        Collections.shuffle(deck);
     }
 
     private void initializeDeck(int numberOfPlayers) {
@@ -21,12 +21,12 @@ public class Deck{
 
         ranks.stream()
                 .filter(rank -> rank.getValue() >= numberOfStart)
-                .forEach(rank -> suits.forEach(suit -> deckCards.add(new Card(suit, rank))));
+                .forEach(rank -> suits.forEach(suit -> deck.add(new Card(suit, rank))));
     }
 
     public Card dealCard() {
-        if (deckCards.isEmpty())
+        if (deck.isEmpty())
             throw new DeckEmptyException();
-        return deckCards.remove(0);
+        return deck.remove(0);
     }
 }
