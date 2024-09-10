@@ -6,13 +6,27 @@ import lombok.Getter;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ * Classe utilisée pour calculer et déterminer la meilleure combinaison de cartes
+ * dans une main, ainsi que le score associé.
+ *
+ * @author matteo
+ */
 public class CalculateScore {
+    /** Map associant chaque combinaison à son score pour une main donnée. */
     private final Map<Combo, Integer> scores = new EnumMap<>(Combo.class);
+
     @Getter
     private Combo bestCombo;
     @Getter
     private int bestScore;
 
+    /**
+     * Constructeur qui calcule toutes les combinaisons possibles
+     * et détermine la meilleure combinaison et son score.
+     *
+     * @param hand la main de poker à évaluer
+     */
     public CalculateScore(Hand hand) {
         calculateAllScores(hand);
         determineBestScore();
@@ -31,6 +45,9 @@ public class CalculateScore {
         scores.put(Combo.ROYAL_FLUSH, HandEvaluator.royalFlush(hand));
     }
 
+    /**
+     * Détermine la meilleure combinaison et son score en comparant toutes les combinaisons calculées.
+     */
     private void determineBestScore() {
         Map.Entry<Combo, Integer> bestEntry = scores.entrySet().stream()
                 .max(Map.Entry.comparingByValue())

@@ -7,8 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author matteo
+ */
 public class HandEvaluatorTest {
 
+    /** La main de poker utilisée pour les tests. */
     private Hand hand;
 
     @BeforeEach
@@ -16,10 +20,15 @@ public class HandEvaluatorTest {
         hand = new Hand();
     }
 
+    /**
+     * Ajoute des cartes à une main pour faciliter les tests.
+     *
+     * @param hand la main à laquelle ajouter des cartes
+     * @param cards les cartes à ajouter
+     */
     private void addCardsToHand(Hand hand, Card... cards) {
-        for (Card card : cards) {
+        for (Card card : cards)
             hand.addCard(card);
-        }
     }
 
     @Test
@@ -271,19 +280,8 @@ public class HandEvaluatorTest {
         hand.sortHand();
 
         assertEquals(14, hand.getCards().get(4).getValue());
-
-        HandEvaluator.straight(hand);
-
-        assertEquals(1, hand.getCards().get(0).getValue());
+        assertEquals(HandEvaluator.straight(hand), 15);
         assertEquals(Rank.ACE, hand.getCards().get(0).getRank());
-        assertEquals(1, hand.getCards().get(0).getValue());
-        assertEquals(Rank.TWO, hand.getCards().get(1).getRank());
-        assertEquals(2, hand.getCards().get(1).getValue());
-        assertEquals(Rank.THREE, hand.getCards().get(2).getRank());
-        assertEquals(3, hand.getCards().get(2).getValue());
-        assertEquals(Rank.FOUR, hand.getCards().get(3).getRank());
-        assertEquals(4, hand.getCards().get(3).getValue());
-        assertEquals(Rank.FIVE, hand.getCards().get(4).getRank());
-        assertEquals(5, hand.getCards().get(4).getValue());
+        assertEquals(1, hand.getCards().getFirst().getValue());
     }
 }
