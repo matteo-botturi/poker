@@ -15,7 +15,10 @@ import java.util.List;
  */
 @Getter
 public class Hand {
+    /** Le nombre maximum de cartes dans une main. */
     private static final int MAX_CARDS = 5;
+
+    /** La liste des cartes qui composent la main. */
     private final List<Card> cards;
 
     /**

@@ -14,10 +14,17 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class Player {
+    /** Le nom du joueur. */
     private final String name;
+
+    /** La main de cartes du joueur. */
     private final Hand hand;
+
+    /** Le nombre de points du joueur, initialisé à 0. */
     @Setter
     private int points = 0;
+
+    /** La combinaison gagnante du joueur, déterminée lors du jeu. */
     @Setter
     private Combo winnerCombo;
 

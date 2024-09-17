@@ -15,8 +15,13 @@ import lombok.Setter;
  */
 @Getter
 public class Card implements Comparable<Card> {
+    /** La couleur de la carte (coeur, pique, carreau, trèfle). */
     private final Suit suit;
+
+    /** Le rang de la carte (Deux, Trois, ... Roi, As). */
     private final Rank rank;
+
+    /** La valeur numérique de la carte, utilisée pour les comparaisons et les classements. */
     @Setter
     private int value;
 

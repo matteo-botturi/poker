@@ -14,37 +14,39 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Combo {
-    /** Quinte Flush Royale (Royal Flush) */
+    /** Quinte Flush Royale */
     ROYAL_FLUSH(1, "Royal Flush"),
 
-    /** Quinte flush (Straight Flush) */
+    /** Quinte flush */
     STRAIGHT_FLUSH(2, "Straight Flush"),
 
-    /** Carré (Four of a Kind) */
+    /** Carré */
     FOUR_OF_A_KIND(3, "Four of a kind"),
 
-    /** Full (Full House) */
+    /** Full */
     FULL_HOUSE(4, "Full House"),
 
-    /** Couleur (Flush) */
+    /** Couleur */
     FLUSH(5, "Flush"),
 
-    /** Quinte (Straight) */
+    /** Quinte */
     STRAIGHT(6, "Straight"),
 
-    /** Brelan (Three of a Kind) */
+    /** Brelan */
     THREE_OF_A_KIND(7, "Three of a kind"),
 
-    /** Double paire (Two Pair) */
+    /** Double paire */
     TWO_PAIR(8, "Two Pair"),
 
-    /** Paire (One Pair) */
+    /** Paire */
     ONE_PAIR(9, "One Pair"),
 
-    /** Carte haute (High Card) */
+    /** Carte haute */
     HIGH_CARD(10, "High card");
 
     /** La priorité de la combinaison, où 1 est la plus haute. */
     private final int priority;
+
+    /** Description lisible de la combinaison. */
     private final String description;
 }

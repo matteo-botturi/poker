@@ -1,3 +1,5 @@
+package fr.mb.poker.test;
+
 import fr.mb.poker.enumeration.Combo;
 import fr.mb.poker.enumeration.Rank;
 import fr.mb.poker.enumeration.Suit;
@@ -10,13 +12,28 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 /**
+ * Classe de test pour la classe Game.
+ * <p>
+ * Cette classe teste la détermination du gagnant dans une partie de poker en fonction
+ * de différents critères, tels que la priorité des combinaisons, la carte haute, et la
+ * comparaison des couleurs en cas d'égalité.
+ *
  * @author matteo
  */
 public class GameTest {
+
+    /** L'instance du jeu à tester. */
     private Game game;
+
+    /** Le premier joueur. */
     private Player player1;
+
+    /** Le deuxième joueur. */
     private Player player2;
 
+    /**
+     * Initialise les objets nécessaires avant chaque test.
+     */
     @BeforeEach
     public void setup() {
         game = new Game(2);

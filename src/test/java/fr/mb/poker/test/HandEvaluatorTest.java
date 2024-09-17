@@ -1,3 +1,5 @@
+package fr.mb.poker.test;
+
 import fr.mb.poker.model.Card;
 import fr.mb.poker.model.Hand;
 import fr.mb.poker.outils.HandEvaluator;
@@ -8,6 +10,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
+ * Classe de test pour la classe HandEvaluator.
+ * <p>
+ * Cette classe contient des tests unitaires pour vérifier le bon fonctionnement
+ * des méthodes d'évaluation des combinaisons de poker. Chaque méthode de la classe
+ * HandEvaluator est testée pour divers cas, incluant les cas valides et les cas d'erreur.
+ *
  * @author matteo
  */
 public class HandEvaluatorTest {
@@ -15,6 +23,9 @@ public class HandEvaluatorTest {
     /** La main de poker utilisée pour les tests. */
     private Hand hand;
 
+    /**
+     * Initialise une nouvelle main avant chaque test.
+     */
     @BeforeEach
     void setUp() {
         hand = new Hand();
@@ -31,6 +42,9 @@ public class HandEvaluatorTest {
             hand.addCard(card);
     }
 
+    /**
+     * Teste la méthode flush() pour vérifier qu'elle identifie correctement une couleur.
+     */
     @Test
     void testFlush() {
         // Flush
@@ -55,6 +69,9 @@ public class HandEvaluatorTest {
         assertEquals(0, HandEvaluator.flush(hand));
     }
 
+    /**
+     * Teste la méthode straightFlush() pour vérifier qu'elle identifie correctement une quinte flush.
+     */
     @Test
     void testStraightFlush() {
         // Straight Flush
@@ -101,6 +118,9 @@ public class HandEvaluatorTest {
         assertEquals(15, HandEvaluator.straightFlush(hand));
     }
 
+    /**
+     * Teste la méthode royalFlush() pour vérifier qu'elle identifie correctement une quinte flush royale.
+     */
     @Test
     void testRoyalFlush() {
         // Royal Flush
@@ -136,6 +156,9 @@ public class HandEvaluatorTest {
         assertEquals(0, HandEvaluator.royalFlush(hand));
     }
 
+    /**
+     * Teste la méthode fourOfAKind() pour vérifier qu'elle identifie correctement un carré.
+     */
     @Test
     void testFourOfAKind() {
         addCardsToHand(hand,
@@ -148,6 +171,9 @@ public class HandEvaluatorTest {
         assertEquals(56, HandEvaluator.fourOfAKind(hand));
     }
 
+    /**
+     * Teste la méthode fullHouse() pour vérifier qu'elle identifie correctement un full.
+     */
     @Test
     void testFullHouse() {
         addCardsToHand(hand,
@@ -160,6 +186,9 @@ public class HandEvaluatorTest {
         assertEquals(43, HandEvaluator.fullHouse(hand));
     }
 
+    /**
+     * Teste la méthode straight() pour vérifier qu'elle identifie correctement une quinte.
+     */
     @Test
     public void testStraight() {
         // Straight "normal"
@@ -184,6 +213,9 @@ public class HandEvaluatorTest {
         assertEquals(15, HandEvaluator.straight(hand));
     }
 
+    /**
+     * Teste la méthode threeOfAKind() pour vérifier qu'elle identifie correctement un brelan.
+     */
     @Test
     void testThreeOfAKind() {
         // Three-of-a-Kind
@@ -208,6 +240,9 @@ public class HandEvaluatorTest {
         assertEquals(0, HandEvaluator.threeOfAKind(hand));
     }
 
+    /**
+     * Teste la méthode twoPair() pour vérifier qu'elle identifie correctement une double paire.
+     */
     @Test
     void testTwoPair() {
         // Two Pair
@@ -232,6 +267,9 @@ public class HandEvaluatorTest {
         assertEquals(0, HandEvaluator.twoPair(hand));
     }
 
+    /**
+     * Teste la méthode onePair() pour vérifier qu'elle identifie correctement une paire.
+     */
     @Test
     void testOnePair() {
         // One Pair
@@ -256,6 +294,9 @@ public class HandEvaluatorTest {
         assertEquals(0, HandEvaluator.onePair(hand));
     }
 
+    /**
+     * Teste la méthode highCard() pour vérifier qu'elle identifie correctement la carte haute.
+     */
     @Test
     void testHighCard() {
         addCardsToHand(hand,
@@ -268,6 +309,10 @@ public class HandEvaluatorTest {
         assertEquals(13, HandEvaluator.highCard(hand));
     }
 
+    /**
+     * Teste la méthode adjustAceForLowStraight() pour vérifier qu'elle modifie correctement
+     * la valeur de l'As pour former une quinte basse (A-2-3-4-5).
+     */
     @Test
     public void testAdjustAceForLowStraight() {
         addCardsToHand(hand,

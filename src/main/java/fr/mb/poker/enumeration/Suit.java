@@ -26,6 +26,10 @@ public enum Suit {
 
     /** Le niveau de la couleur, où 4 est la plus haute. */
     private final int level;
+
+    /** Le symbole associé à la couleur. */
     private final String symbol;
+
+    /** La couleur (rouge ou noir) associée à la couleur du jeu de cartes. */
     private final Color color;
 }

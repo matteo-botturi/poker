@@ -15,6 +15,10 @@ import java.util.Scanner;
  */
 public class Main {
 
+    /**
+     * Méthode principale. Le point d’entrée de l’application
+     * @param args
+     */
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             boolean playAgain = true;

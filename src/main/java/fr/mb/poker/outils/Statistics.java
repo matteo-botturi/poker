@@ -13,6 +13,7 @@ import java.util.Map;
  * de chaque combinaison par rapport au nombre total de mains jouées.
  *
  * @author matteo
+ *
  */
 public class Statistics {
     /** Map associant chaque combinaison de poker à son nombre d'occurrences. */
@@ -22,6 +23,7 @@ public class Statistics {
     @Getter
     private static int numberOfGames = 0;
 
+    /** Bloc statique pour initialiser la map des combinaisons avec des valeurs initiales de 0. */
     static {
         for (Combo combo : Combo.values())
             comboList.put(combo, 0.0);

@@ -16,8 +16,11 @@ public class CalculateScore {
     /** Map associant chaque combinaison à son score pour une main donnée. */
     private final Map<Combo, Integer> scores = new EnumMap<>(Combo.class);
 
+    /** La meilleure combinaison trouvée dans la main. */
     @Getter
     private Combo bestCombo;
+
+    /** Le score de la meilleure combinaison trouvée dans la main. */
     @Getter
     private int bestScore;
 
@@ -32,6 +35,11 @@ public class CalculateScore {
         determineBestScore();
     }
 
+    /**
+     * Calcule les scores pour toutes les combinaisons possibles dans une main donnée.
+     *
+     * @param hand la main à évaluer
+     */
     private void calculateAllScores(Hand hand) {
         scores.put(Combo.HIGH_CARD, HandEvaluator.highCard(hand));
         scores.put(Combo.ONE_PAIR, HandEvaluator.onePair(hand));
