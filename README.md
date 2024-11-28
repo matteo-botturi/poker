@@ -1,4 +1,8 @@
-# Jeu de Poker - Application Java
+<div align="center">
+  <h1>Jeu de Poker - Application Java</h1>
+  <img src="images/poker.jpg" width="500" alt="Poker Logo"/>
+</div>
+
 
 ## Description
 
@@ -53,6 +57,15 @@ Pour exécuter l'application :
 Pour exécuter les tests unitaires, utilisez Maven ou l'environnement de test intégré de votre IDE :
 
 mvn test
+
+## Futurs Développements
+
+Dans les prochaines versions de l'application, il est prévu d'ajouter une interface graphique (GUI) pour rendre le jeu plus interactif et convivial. Les principales améliorations comprennent :
+
+- **Ajout de JavaFX** : Une interface graphique utilisant JavaFX sera intégrée pour permettre une interaction visuelle avec le jeu.
+- **Web Application** : Envisager la possibilité de transformer le jeu en une application web, offrant ainsi une accessibilité plus large.
+
+Ces mises à jour viseront à améliorer l'expérience utilisateur et à rendre l'application plus moderne et accessible.
 
 ## Conclusion
 
